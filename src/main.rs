@@ -58,7 +58,7 @@ fn run() -> Result<(), String> {
         println!("{HELP}");
         Ok(())
     } else if args.version {
-        println!("{VERSION}");
+        println!("joyn {VERSION}");
         Ok(())
     } else {
         let delimiter = convert_escape_sequences(&args.delimiter.unwrap_or("".to_string()));
