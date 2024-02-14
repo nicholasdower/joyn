@@ -1,5 +1,19 @@
 # joyn
 
+## Install
+
+```shell
+brew install nicholasdower/tap/joyn
+```
+
+## Uninstall
+
+```shell
+brew uninstall joyn
+```
+
+## Help
+
 ```
 usage: joyn [-d <delimiter>] [file ...]
 

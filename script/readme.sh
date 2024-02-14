@@ -23,6 +23,20 @@ fi
 cat << EOF > README.md
 # joyn
 
+## Install
+
+\`\`\`shell
+brew install nicholasdower/tap/joyn
+\`\`\`
+
+## Uninstall
+
+\`\`\`shell
+brew uninstall joyn
+\`\`\`
+
+## Help
+
 \`\`\`
 $($binary -h)
 \`\`\`
