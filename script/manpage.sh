@@ -32,16 +32,4 @@ Print help\.
 .TP
 \fB\-v\, \-\-version\fR
 Print the version\.
-.SH INSTALLATION
-Install:
-.PP
-.RS 4
-brew install nicholasdower/tap/joyn
-.RE
-.PP
-Uninstall:
-.PP
-.RS 4
-brew uninstall joyn
-.RE
 EOF

@@ -6,9 +6,25 @@ else
   dir="$RUNNER_TEMP/joyn"
 fi
 
+if [ $# -gt 1 ]; then
+  echo "usage: $0 [<bin-path>]" >&2
+  exit 1
+fi
+
+if [ $# -eq 1 ]; then
+  binary="$1/joyn"
+else
+  binary="./target/debug/joyn"
+fi
+
+if [ ! -f "$binary" ]; then
+  echo "error: $binary does not exist" >&2
+  exit 1
+fi
+
 rm -rf "$dir"
 mkdir -p "$dir"
-cp ./target/release/joyn "$dir"
+cp "$binary" "$dir"
 cd "$dir"
 
 function test() {

@@ -1,5 +1,8 @@
 use clap::Parser;
-use std::{fs::File, io::{self, BufRead, Write}};
+use std::{
+    fs::File,
+    io::{self, BufRead, Write},
+};
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
@@ -13,16 +16,6 @@ Options
     -d, --delimiter  The line delimiter.
     -h, --help       Print help.
     -v, --version    Print version.
-
-Installation
-
-    Install:
-
-        brew install nicholasdower/tap/joyn
-
-    Uninstall:
-
-        brew uninstall joyn
 ";
 
 #[derive(Parser)]
@@ -47,7 +40,7 @@ fn main() {
         Err(e) => {
             eprintln!("error: {e}");
             std::process::exit(1);
-        },
+        }
     }
 }
 
@@ -102,18 +95,21 @@ fn convert_escape_sequences(input: &str) -> String {
 fn stream_all(files: Vec<String>, delimiter_bytes: &[u8]) -> Result<(), String> {
     let mut newline = false;
     if !files.is_empty() {
-        files.iter().enumerate().try_for_each(|(i, file_path)| {
-            match File::open(file_path) {
+        files
+            .iter()
+            .enumerate()
+            .try_for_each(|(i, file_path)| match File::open(file_path) {
                 Ok(file) => {
                     if i > 0 {
-                        io::stdout().write_all(delimiter_bytes).map_err(|e| format!("{e}"))?;
+                        io::stdout()
+                            .write_all(delimiter_bytes)
+                            .map_err(|e| format!("{e}"))?;
                     }
                     newline = stream_one(io::BufReader::new(file), delimiter_bytes)?;
                     Ok(())
-                },
+                }
                 Err(e) => Err(format!("{e}")),
-            }
-        })?;
+            })?;
     } else if atty::is(atty::Stream::Stdin) {
         return Err("nothing to join".to_string());
     } else {
@@ -121,7 +117,9 @@ fn stream_all(files: Vec<String>, delimiter_bytes: &[u8]) -> Result<(), String> 
     }
 
     if newline {
-        io::stdout().write_all("\n".as_bytes()).map_err(|e| format!("{e}"))?;
+        io::stdout()
+            .write_all("\n".as_bytes())
+            .map_err(|e| format!("{e}"))?;
     }
     Ok(())
 }
@@ -133,7 +131,7 @@ fn stream_one<R: BufRead>(mut handle: R, delimiter: &[u8]) -> Result<bool, Strin
     loop {
         let buffer = match handle.fill_buf() {
             Ok(buf) => buf,
-            Err(e) => return Err(format!("{e}"))
+            Err(e) => return Err(format!("{e}")),
         };
 
         if buffer.is_empty() {
