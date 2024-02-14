@@ -1,5 +1,4 @@
 name: Build, Lint & Test
-
 on:
   workflow_dispatch:
   pull_request:
@@ -9,19 +8,18 @@ on:
     paths:
       - '**'
       - '!**/*.md'
-      - '!/.release-notes'
-      - '!/Formula/joyn.rb'
-      - '!/man/joyn.1'
-      - '!/script/changelog.sh'
-      - '!/script/homebrew.sh'
-      - '!/script/manpage.sh'
-      - '!/script/readme.sh'
-      - '!/script/release.sh'
-      - '!/script/version.sh'
-      - '!/LICENSE.txt'
-      - '!/.github/dependabot.yml'
-      - '!/.github/workflows/release.yml'
-
+      - '!.release-notes'
+      - '!Formula/joyn.rb'
+      - '!man/joyn.1'
+      - '!script/changelog.sh'
+      - '!script/homebrew.sh'
+      - '!script/manpage.sh'
+      - '!script/readme.sh'
+      - '!script/release.sh'
+      - '!script/version.sh'
+      - '!LICENSE.txt'
+      - '!.github/dependabot.yml'
+      - '!.github/workflows/release.yml'
 jobs:
   build-lint-test:
     name: Build, Lint & Test
