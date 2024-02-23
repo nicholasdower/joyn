@@ -1,3 +1,8 @@
+## 3.0.0
+
+- Remove support for joining files.
+- Use commandline args rather than flags.
+
 ## 2.0.0
 
 - Rename to join.
