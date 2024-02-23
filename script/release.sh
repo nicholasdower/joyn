@@ -27,20 +27,20 @@ echo "Set version to $version"
 echo "Create man page"
 ./script/manpage.sh "$version" "$(date '+%Y-%m-%d')"
 
-x86_64_apple_darwin_file="joyn-$version-x86_64-apple-darwin.tar.gz"
-aarch64_apple_darwin_file="joyn-$version-aarch64-apple-darwin.tar.gz"
+x86_64_apple_darwin_file="join-$version-x86_64-apple-darwin.tar.gz"
+aarch64_apple_darwin_file="join-$version-aarch64-apple-darwin.tar.gz"
 
 echo "Create $x86_64_apple_darwin_file"
 rm -rf bin
 mkdir -p bin
-mv joyn-x86_64-apple-darwin bin/joyn
+mv join-x86_64-apple-darwin bin/join
 rm -f "$x86_64_apple_darwin_file"
 tar -czf "$x86_64_apple_darwin_file" ./man/ ./bin/
 
 echo "Create $aarch64_apple_darwin_file"
 rm -rf bin
 mkdir -p bin
-mv joyn-aarch64-apple-darwin bin/joyn
+mv join-aarch64-apple-darwin bin/join
 rm -f "$aarch64_apple_darwin_file"
 tar -czf "$aarch64_apple_darwin_file" ./man/ ./bin/
 
@@ -54,15 +54,15 @@ echo "Update README.md"
 ./script/readme.sh target/release
 
 git config user.email "nicholasdower@gmail.com"
-git config user.name "joyn-ci"
+git config user.name "join-ci"
 
 echo "Commit changes"
 git add CHANGELOG.md
 git add Cargo.lock
 git add Cargo.toml
-git add Formula/joyn.rb
+git add Formula/join.rb
 git add README.md
-git add man/joyn.1
+git add man/join.1
 echo -e "v$version Release\n\n$(cat .release-notes)" | git commit -F -
 
 echo "Add tag v$version"
@@ -86,7 +86,7 @@ echo "Create release"
 gh release create "v$version" \
   "$x86_64_apple_darwin_file" \
   "$aarch64_apple_darwin_file" \
-  -R nicholasdower/joyn \
+  -R nicholasdower/join \
   --notes-file tmp/.release-notes
 
 echo "Trigger Homebrew update"

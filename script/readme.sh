@@ -10,9 +10,9 @@ if [ $# -gt 1 ]; then
 fi
 
 if [ $# -eq 1 ]; then
-  binary="$1/joyn"
+  binary="$1/join"
 else
-  binary="./target/debug/joyn"
+  binary="./target/debug/join"
 fi
 
 if [ ! -f "$binary" ]; then
@@ -21,18 +21,18 @@ if [ ! -f "$binary" ]; then
 fi
 
 cat << EOF > README.md
-# joyn
+# join
 
 ## Install
 
 \`\`\`shell
-brew install nicholasdower/tap/joyn
+brew install nicholasdower/tap/join
 \`\`\`
 
 ## Uninstall
 
 \`\`\`shell
-brew uninstall joyn
+brew uninstall join
 \`\`\`
 
 ## Help

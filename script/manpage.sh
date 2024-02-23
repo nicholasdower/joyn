@@ -14,12 +14,12 @@ date="$2"
 
 rm -rf man
 mkdir man
-cat << EOF > man/joyn.1
-.TH JOYN 1 $date $version ""
+cat << EOF > man/join.1
+.TH JOIN 1 $date $version ""
 .SH NAME
-\fBjoyn\fR \- Join lines
+\fBjoin\fR \- Join lines
 .SH SYNOPSIS
-\fBjoyn\fR [\fB-d\fR \fI<delimiter>\fR] [\fI<file> \.\.\.\fR]
+\fBjoin\fR [\fB-d\fR \fI<delimiter>\fR] [\fI<file> \.\.\.\fR]
 .SH DESCRIPTION
 Joins lines, optionally using the specified delimeter.
 .SH OPTIONS

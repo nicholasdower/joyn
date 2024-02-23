@@ -7,7 +7,7 @@ use std::{
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 const HELP: &str = "\
-usage: joyn [-d <delimiter>] [file ...]
+usage: join [-d <delimiter>] [file ...]
 
 Join lines
 
@@ -51,7 +51,7 @@ fn run() -> Result<(), String> {
         println!("{HELP}");
         Ok(())
     } else if args.version {
-        println!("joyn {VERSION}");
+        println!("join {VERSION}");
         Ok(())
     } else {
         let delimiter = convert_escape_sequences(&args.delimiter.unwrap_or("".to_string()));

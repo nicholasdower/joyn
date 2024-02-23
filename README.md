@@ -1,21 +1,21 @@
-# joyn
+# join
 
 ## Install
 
 ```shell
-brew install nicholasdower/tap/joyn
+brew install nicholasdower/tap/join
 ```
 
 ## Uninstall
 
 ```shell
-brew uninstall joyn
+brew uninstall join
 ```
 
 ## Help
 
 ```
-usage: joyn [-d <delimiter>] [file ...]
+usage: join [-d <delimiter>] [file ...]
 
 Join lines
 
