@@ -4,35 +4,34 @@ set -e
 set -u
 set -o pipefail
 
-if [ $# -gt 1 ]; then
-  echo "usage: $0 [<bin-path>]" >&2
+if [ $# -gt 2 ]; then
+  echo "usage: $0 <bin-dir> <binary>" >&2
   exit 1
 fi
 
-if [ $# -eq 1 ]; then
-  binary="$1/join"
-else
-  binary="./target/debug/join"
-fi
+bin_dir="$1"
+binary="$2"
 
-if [ ! -f "$binary" ]; then
-  echo "error: $binary does not exist" >&2
+binary_path="$bin_dir/$binary"
+
+if [ ! -f "$binary_path" ]; then
+  echo "error: $binary_path does not exist" >&2
   exit 1
 fi
 
 cat << EOF > README.md
-# join
+# $binary
 
 ## Install
 
 \`\`\`shell
-brew install nicholasdower/tap/join
+brew install nicholasdower/tap/$binary
 \`\`\`
 
 ## Uninstall
 
 \`\`\`shell
-brew uninstall join
+brew uninstall $binary
 \`\`\`
 
 ## Help
