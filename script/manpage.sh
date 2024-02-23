@@ -19,13 +19,10 @@ cat << EOF > man/join.1
 .SH NAME
 \fBjoin\fR \- Join lines
 .SH SYNOPSIS
-\fBjoin\fR [\fB-d\fR \fI<delimiter>\fR] [\fI<file> \.\.\.\fR]
+\fBjoin\fR [<delimiter>]
 .SH DESCRIPTION
-Joins lines, optionally using the specified delimeter.
+Join lines, optionally using the specified delimeter.
 .SH OPTIONS
-.TP
-\fB\-d, \-\-delimeter\fR
-The line delimeter\.
 .TP
 \fB\-h, \-\-help\fR
 Print help\.

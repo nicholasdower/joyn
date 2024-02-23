@@ -1,19 +1,17 @@
 use clap::Parser;
-use std::{
-    fs::File,
-    io::{self, BufRead, Write},
-};
+use std::io::{self, BufRead, Write};
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 const HELP: &str = "\
 usage: join [-d <delimiter>] [file ...]
 
-Join lines
+Description
+
+    Join lines, optionally using the specified delimeter.
 
 Options
 
-    -d, --delimiter  The line delimiter.
     -h, --help       Print help.
     -v, --version    Print version.
 ";
@@ -27,11 +25,8 @@ struct Cli {
     #[arg(short, long)]
     version: bool,
 
-    #[arg(short, long)]
+    #[arg()]
     delimiter: Option<String>,
-
-    #[arg(name = "file")]
-    files: Vec<String>,
 }
 
 fn main() {
@@ -49,14 +44,60 @@ fn run() -> Result<(), String> {
 
     if args.help {
         println!("{HELP}");
-        Ok(())
-    } else if args.version {
-        println!("join {VERSION}");
-        Ok(())
-    } else {
-        let delimiter = convert_escape_sequences(&args.delimiter.unwrap_or("".to_string()));
-        stream_all(args.files, delimiter.as_bytes())
+        return Ok(());
     }
+
+    if args.version {
+        println!("join {VERSION}");
+        return Ok(());
+    }
+
+    if atty::is(atty::Stream::Stdin) {
+        return Err("nothing to quote".to_string());
+    }
+
+    let delimiter = match args.delimiter {
+        Some(d) => convert_escape_sequences(&d),
+        None => "".to_string(),
+    };
+    stream(&delimiter).map_err(|e| e.to_string())
+}
+
+fn stream(delimiter: &String) -> io::Result<()> {
+    let delimiter = delimiter.as_bytes();
+
+    let mut stdin = io::stdin().lock();
+    let mut stdout = io::stdout();
+    let mut newline = false;
+
+    loop {
+        let buffer = stdin.fill_buf()?;
+
+        if buffer.is_empty() {
+            break;
+        }
+
+        let buffer_len = buffer.len();
+        for &byte in buffer {
+            if newline {
+                stdout.write_all(delimiter)?;
+                newline = false;
+            }
+            if byte == b'\n' {
+                newline = true;
+            } else {
+                stdout.write_all(&[byte])?;
+            }
+        }
+
+        if newline {
+            stdout.write_all(b"\n")?;
+        }
+
+        stdin.consume(buffer_len);
+    }
+
+    Ok(())
 }
 
 fn convert_escape_sequences(input: &str) -> String {
@@ -90,69 +131,4 @@ fn convert_escape_sequences(input: &str) -> String {
     }
 
     result
-}
-
-fn stream_all(files: Vec<String>, delimiter_bytes: &[u8]) -> Result<(), String> {
-    let mut newline = false;
-    if !files.is_empty() {
-        files
-            .iter()
-            .enumerate()
-            .try_for_each(|(i, file_path)| match File::open(file_path) {
-                Ok(file) => {
-                    if i > 0 {
-                        io::stdout()
-                            .write_all(delimiter_bytes)
-                            .map_err(|e| format!("{e}"))?;
-                    }
-                    newline = stream_one(io::BufReader::new(file), delimiter_bytes)?;
-                    Ok(())
-                }
-                Err(e) => Err(format!("{e}")),
-            })?;
-    } else if atty::is(atty::Stream::Stdin) {
-        return Err("nothing to join".to_string());
-    } else {
-        newline = stream_one(io::stdin().lock(), delimiter_bytes)?;
-    }
-
-    if newline {
-        io::stdout()
-            .write_all("\n".as_bytes())
-            .map_err(|e| format!("{e}"))?;
-    }
-    Ok(())
-}
-
-fn stream_one<R: BufRead>(mut handle: R, delimiter: &[u8]) -> Result<bool, String> {
-    let mut stdout = io::stdout();
-    let mut newline = false;
-
-    loop {
-        let buffer = match handle.fill_buf() {
-            Ok(buf) => buf,
-            Err(e) => return Err(format!("{e}")),
-        };
-
-        if buffer.is_empty() {
-            break;
-        }
-
-        let buffer_len = buffer.len();
-        for &byte in buffer {
-            if newline {
-                stdout.write_all(delimiter).map_err(|e| format!("{e}"))?;
-                newline = false;
-            }
-            if byte == b'\n' {
-                newline = true;
-            } else {
-                stdout.write_all(&[byte]).map_err(|e| format!("{e}"))?;
-            }
-        }
-
-        handle.consume(buffer_len);
-    }
-
-    Ok(newline)
 }

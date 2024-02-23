@@ -42,92 +42,42 @@ function test() {
   fi
 }
 
-#script -q actual ./join > /dev/null
-#printf "error: nothing to join\r\n" > expected
-#test "no input"
-
-printf "foo\n" | ./join -d , 2>&1 > actual
+printf "foo\n" | ./join , 2>&1 > actual
 printf "foo\n" > expected
-test "stdin: single line with newline"
+test "single line with newline"
 
-printf "foo" | ./join -d , 2>&1 > actual
+printf "foo" | ./join , 2>&1 > actual
 printf "foo" > expected
-test "stdin: single line without newline"
+test "single line without newline"
 
-printf "foo\nbar\n" | ./join -d , 2>&1 > actual
+printf "foo\nbar\n" | ./join , 2>&1 > actual
 printf "foo,bar\n" > expected
-test "stdin: muliline with newline"
+test "muliline with newline"
 
-printf "foo\nbar" | ./join -d , 2>&1 > actual
+printf "foo\nbar" | ./join , 2>&1 > actual
 printf "foo,bar" > expected
-test "stdin: muliline without newline"
+test "muliline without newline"
 
-printf "foo\n\nbar\n" | ./join -d , 2>&1 > actual
+printf "foo\n\nbar\n" | ./join , 2>&1 > actual
 printf "foo,,bar\n" > expected
-test "stdin: blank lines"
+test "blank lines"
 
-printf "foo\n\n" | ./join -d , 2>&1 > actual
+printf "foo\n\n" | ./join , 2>&1 > actual
 printf "foo,\n" > expected
-test "stdin: trailing blank lines"
-
-printf "foo\n" > one
-./join -d , one 2>&1 > actual
-printf "foo\n" > expected
-test "file: single line with newline"
-
-printf "foo" > one
-./join -d , one 2>&1 > actual
-printf "foo" > expected
-test "file: single line without newline"
-
-printf "foo\nbar\n" > one
-./join -d , one 2>&1 > actual
-printf "foo,bar\n" > expected
-test "file: multiline with newline"
-
-printf "foo\nbar" > one
-./join -d , one 2>&1 > actual
-printf "foo,bar" > expected
-test "file: multiline without newline"
-
-printf "foo\n" > one
-printf "bar\n" > two
-./join -d , one two 2>&1 > actual
-printf "foo,bar\n" > expected
-test "files: with newline"
-
-printf "foo" > one
-printf "bar" > two
-./join -d , one two 2>&1 > actual
-printf "foo,bar" > expected
-test "files: without newline"
-
-printf "" > one
-printf "" > two
-printf "" > tre
-./join -d , one two tre 2>&1 > actual
-printf ",," > expected
-test "files: all empty"
-
-printf "foo" > one
-printf "" > two
-printf "bar" > tre
-./join -d , one two tre 2>&1 > actual
-printf "foo,,bar" > expected
-test "files: some empty"
+test "trailing blank lines"
 
 printf "foo\nbar\n" | ./join 2>&1 > actual
 printf "foobar\n" > expected
 test "delimiter: "
 
-printf "foo\nbar\n" | ./join -d , 2>&1 > actual
+printf "foo\nbar\n" | ./join , 2>&1 > actual
 printf "foo,bar\n" > expected
 test "delimiter: ,"
 
-printf "foo\nbar\n" | ./join -d ",\t" 2>&1 > actual
+printf "foo\nbar\n" | ./join ",\t" 2>&1 > actual
 printf "foo,\tbar\n" > expected
 test "delimiter: tab"
 
-printf "foo\nbar\n" | ./join -d ",\n" 2>&1 > actual
+printf "foo\nbar\n" | ./join ",\n" 2>&1 > actual
 printf "foo,\nbar\n" > expected
 test "delimiter: newline"

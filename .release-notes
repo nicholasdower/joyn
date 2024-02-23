@@ -1,1 +1,2 @@
-- No changes
+- Remove support for joining files.
+- Use commandline args rather than flags.
